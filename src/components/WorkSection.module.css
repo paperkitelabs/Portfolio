@@ -69,6 +69,8 @@
   margin: 0;
   display: flex;
   flex-direction: column;
+  overflow-y: auto;
+  flex: 1;
 }
 
 .fileItem {
@@ -140,6 +142,22 @@
   gap: 0.5rem;
 }
 
+.codeViewWrapper {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.codeLayer {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  transition: filter 0.5s ease, opacity 0.5s ease;
+  overflow: hidden;
+}
+
 .codeArea {
   flex: 1;
   padding: 2rem;
@@ -148,6 +166,36 @@
   white-space: pre;
   color: #d4d4d4;
   overflow-y: auto;
+}
+
+.blurredCode {
+  filter: blur(6px);
+  opacity: 0.2;
+  pointer-events: none;
+}
+
+.loaderOverlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 5;
+  background: rgba(13, 13, 13, 0.5);
+}
+
+.loaderGraphic {
+  margin-bottom: 1.5rem;
+  filter: drop-shadow(0 0 20px rgba(97, 218, 251, 0.4));
+}
+
+.loaderText {
+  font-family: 'Courier New', Courier, monospace;
+  color: #61dafb;
+  font-size: 0.9rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
 }
 
 /* Syntax Highlighting */
@@ -247,11 +295,12 @@
 }
 
 .compiledBody {
-  padding: 3rem;
+  padding: 2rem 3rem;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   flex: 1;
+  overflow-y: auto;
 }
 
 .cardHeader {
@@ -262,9 +311,9 @@
 
 .compiledTitle {
   font-family: var(--font-display);
-  font-size: 2.5rem;
+  font-size: 2rem;
   font-weight: 700;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.3rem;
   line-height: 1.1;
   letter-spacing: -0.02em;
 }
@@ -292,11 +341,44 @@
 }
 
 .compiledDesc {
-  font-size: 1.1rem;
+  font-size: 1rem;
   color: #555;
   line-height: 1.6;
   max-width: 600px;
-  margin-top: 1rem;
+  margin-top: 0.5rem;
+}
+
+.industryBadge {
+  display: inline-block;
+  background: linear-gradient(135deg, #6a1b9a, #1565c0);
+  color: #fff;
+  padding: 0.3rem 0.8rem;
+  border-radius: 20px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 0.6rem;
+}
+
+.impactList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+}
+
+.impactItem {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: #f0faf0;
+  color: #2e7d32;
+  padding: 0.3rem 0.7rem;
+  border-radius: 20px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  white-space: nowrap;
 }
 
 .visitButton {

@@ -55,7 +55,7 @@ export default function Navbar() {
               </a>
             </div>
           </div>
-          <a href="#services" className={styles.navLink}>Services</a>
+          <a href="/services" className={styles.navLink}>Services</a>
           <a href="/contact" className={styles.navLink}>Contact</a>
         </div>
 
@@ -106,7 +106,7 @@ export default function Navbar() {
             <div className={styles.trayContent}>
               <a href="/tech-work" className={styles.mobileLink} onClick={() => setIsMobileOpen(false)}>Tech Work</a>
               <a href="/creative-work" className={styles.mobileLink} onClick={() => setIsMobileOpen(false)}>Creative Work</a>
-              <a href="#services" className={styles.mobileLink} onClick={() => setIsMobileOpen(false)}>Services</a>
+              <a href="/services" className={styles.mobileLink} onClick={() => setIsMobileOpen(false)}>Services</a>
               <a href="/contact" className={styles.mobileLink} onClick={() => setIsMobileOpen(false)}>Contact</a>
             </div>
             

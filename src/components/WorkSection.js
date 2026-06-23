@@ -7,11 +7,85 @@ import Image from 'next/image';
 
 const projects = [
   {
+    id: "jsw-steel",
+    filename: "jsw_steel_ai.json",
+    title: "AI Drawing Processing",
+    client: "JSW Steel",
+    industry: "Manufacturing & Engineering",
+    description: "AI-powered workflow that reads engineering CAD drawings, extracts critical dimensions and specifications, and automatically updates structured records within operational systems — replacing hours of manual review.",
+    impact: ["Reduced engineering review effort", "Accelerated drawing processing cycles", "Improved data accuracy"],
+    link: "#",
+    tech: ["Python", "Computer Vision", "AI/ML", "OCR"],
+    image: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?q=80&w=2400&auto=format&fit=crop"
+  },
+  {
+    id: "avpe",
+    filename: "avpe_engine.json",
+    title: "AVPE",
+    client: "Artrage Studios",
+    industry: "AI & Media Production",
+    description: "AI-powered video production ecosystem automating scriptwriting, character design, and video creation for social media at scale.",
+    impact: ["Automated end-to-end video creation", "Reduced production costs", "Scaled content output"],
+    link: "#",
+    tech: ["Python", "TensorFlow", "React"],
+    image: "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=2400&auto=format&fit=crop"
+  },
+  {
+    id: "legal-ai",
+    filename: "legal_ai_platform.json",
+    title: "AI Legal Assistance",
+    client: "LegalTech Platform",
+    industry: "Legal Technology",
+    description: "AI-powered legal platform that converts everyday language into structured legal queries, maps cases to IPC/BNS provisions, and generates FIR drafts, legal notices, and complaint documentation.",
+    impact: ["Made legal guidance accessible to non-lawyers", "Accelerated case preparation", "Automated legal document generation"],
+    link: "#",
+    tech: ["AI/ML", "NLP", "Next.js", "Node.js"],
+    image: "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?q=80&w=2400&auto=format&fit=crop"
+  },
+  {
+    id: "fin-intel",
+    filename: "fin_intelligence.json",
+    title: "Financial Intelligence",
+    client: "Compliance Platform",
+    industry: "Financial Investigation",
+    description: "Intelligent financial analysis platform that auto-processes bank statements, traces fund movements, identifies transaction relationships, and generates structured financial intelligence reports.",
+    impact: ["Reduced analysis time from days to minutes", "Enhanced compliance workflows", "Faster report generation"],
+    link: "#",
+    tech: ["Python", "AI/ML", "React", "PostgreSQL"],
+    image: "https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?q=80&w=2400&auto=format&fit=crop"
+  },
+  {
+    id: "garage-mgmt",
+    filename: "garage_platform.json",
+    title: "Garage Management",
+    client: "Automotive SaaS",
+    industry: "Automotive Services",
+    description: "Full-stack garage management platform with digital invoicing, WhatsApp bill delivery, CRM, inventory tracking, service history, automated reminders, and business analytics dashboards.",
+    impact: ["Complete digitization of operations", "Data-driven business decisions", "Revenue optimization"],
+    link: "#",
+    tech: ["Next.js", "Node.js", "MongoDB", "WhatsApp API"],
+    image: "https://images.unsplash.com/photo-1487754180451-c456f719a1fc?q=80&w=2400&auto=format&fit=crop"
+  },
+  {
+    id: "erp-modern",
+    filename: "erp_modernization.json",
+    title: "Legacy ERP Modernization",
+    client: "Housing Society Platform",
+    industry: "Property Management",
+    description: "Complete reverse-engineering and modernization of a decades-old desktop ERP used by thousands of housing societies — rebuilt with modern UI, automation, and cloud-ready architecture.",
+    impact: ["Eliminated legacy infrastructure dependency", "Improved efficiency & user adoption", "Cloud & mobile ready"],
+    link: "#",
+    tech: ["React", "Node.js", "PostgreSQL", "Docker"],
+    image: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=2400&auto=format&fit=crop"
+  },
+  {
     id: "forever",
     filename: "forever_consultants.json",
     title: "Forever Consultants",
     client: "Forever Consultants",
-    description: "Full-service financial advisory platform featuring dynamic booking systems, vCards, SEO optimization, and Google Analytics.",
+    industry: "Financial Advisory",
+    description: "Full-service financial advisory platform featuring dynamic booking systems, vCards, SEO optimization, and Google Analytics integration.",
+    impact: ["Enhanced online presence", "Streamlined client bookings", "Improved search rankings"],
     link: "https://www.foreverconsultants.in",
     tech: ["Next.js", "Node.js", "SEO"],
     image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=2426&auto=format&fit=crop"
@@ -21,26 +95,18 @@ const projects = [
     filename: "aadya_creation.json",
     title: "Aadya Creation",
     client: "Aadya Creation",
-    description: "Robust full-stack e-commerce experience with seamless UI, secure payment gateways, and inventory management.",
+    industry: "E-Commerce",
+    description: "Robust full-stack e-commerce experience with seamless UI, secure payment gateways, and real-time inventory management.",
+    impact: ["Seamless shopping experience", "Secure payment processing", "Real-time inventory sync"],
     link: "#",
     tech: ["React", "Stripe", "Express"],
     image: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?q=80&w=2400&auto=format&fit=crop"
-  },
-  {
-    id: "avpe",
-    filename: "avpe_engine.json",
-    title: "AVPE",
-    client: "Artrage Studios",
-    description: "AI-powered video production ecosystem automating scriptwriting, character design, and video creation for social media.",
-    link: "#",
-    tech: ["Python", "TensorFlow", "React"],
-    image: "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=2400&auto=format&fit=crop"
   }
 ];
 
 const JsonSyntaxHighlighter = ({ data }) => {
   const jsonString = JSON.stringify(data, null, 2);
-  
+
   // A very basic regex replacer for JSON syntax highlighting
   const highlighted = jsonString.split('\n').map((line, i) => {
     // Check if line is a property key
@@ -48,7 +114,7 @@ const JsonSyntaxHighlighter = ({ data }) => {
       const parts = line.split('":');
       const key = parts[0] + '"';
       let value = parts[1];
-      
+
       // Colorize value
       if (value.includes('"')) {
         value = value.replace(/"([^"]*)"/g, '<span class="string">"$1"</span>');
@@ -66,7 +132,7 @@ const JsonSyntaxHighlighter = ({ data }) => {
         </div>
       );
     }
-    
+
     // Fallback for brackets
     return <div key={i} className="punctuation">{line}</div>;
   });
@@ -97,7 +163,7 @@ export default function WorkSection() {
     sequence.forEach((step, index) => {
       const timeout = setTimeout(() => {
         setTerminalLogs(prev => [...prev, step]);
-        
+
         // If it's the last step, launch the UI
         if (index === sequence.length - 1) {
           setTimeout(() => setIsCompiled(true), 400); // Small pause before burst
@@ -118,14 +184,14 @@ export default function WorkSection() {
         </div>
 
         <div className={styles.ideContainer}>
-          
+
           {/* IDE Sidebar */}
           <div className={styles.sidebar}>
             <div className={styles.sidebarHeader}>Explorer</div>
             <ul className={styles.fileList}>
               {projects.map((p) => (
-                <li 
-                  key={p.id} 
+                <li
+                  key={p.id}
                   className={`${styles.fileItem} ${activeProject.id === p.id ? styles.active : ''}`}
                   onClick={() => {
                     if (activeProject.id !== p.id) {
@@ -155,24 +221,72 @@ export default function WorkSection() {
               </div>
             </div>
 
-            {/* Code View */}
-            <JsonSyntaxHighlighter data={{
-              id: activeProject.id,
-              client: activeProject.client,
-              title: activeProject.title,
-              description: activeProject.description,
-              tech_stack: activeProject.tech,
-              url: activeProject.link,
-              status: "READY_FOR_COMPILE"
-            }} />
+            {/* Code View with Blur & Loader */}
+            <div className={styles.codeViewWrapper}>
+              <div className={`${styles.codeLayer} ${!isCompiled ? styles.blurredCode : ''}`}>
+                <JsonSyntaxHighlighter data={{
+                  id: activeProject.id,
+                  client: activeProject.client,
+                  industry: activeProject.industry,
+                  title: activeProject.title,
+                  description: activeProject.description,
+                  tech_stack: activeProject.tech,
+                  impact: activeProject.impact,
+                  url: activeProject.link,
+                  status: isCompiled ? "COMPILED_SUCCESS" : "COMPILING_MODULES..."
+                }} />
+              </div>
+
+              <AnimatePresence>
+                {!isCompiled && (
+                  <motion.div
+                    className={styles.loaderOverlay}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                  >
+                    <div className={styles.loaderGraphic}>
+                      <motion.svg
+                        width="80"
+                        height="80"
+                        viewBox="0 0 100 100"
+                        animate={{ rotate: 360 }}
+                        transition={{ repeat: Infinity, duration: 2, ease: "linear" }}
+                      >
+                        <defs>
+                          <linearGradient id="loaderGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stopColor="#61dafb" />
+                            <stop offset="100%" stopColor="#d4d4d4" stopOpacity="0" />
+                          </linearGradient>
+                        </defs>
+                        <circle cx="50" cy="50" r="40" stroke="url(#loaderGrad)" strokeWidth="4" fill="none" strokeDasharray="250" strokeDashoffset="50" strokeLinecap="round" />
+                        <motion.circle
+                          cx="50" cy="50" r="20"
+                          fill="#61dafb"
+                          animate={{ scale: [0.8, 1.2, 0.8], opacity: [0.5, 1, 0.5] }}
+                          transition={{ repeat: Infinity, duration: 1.5, ease: "easeInOut" }}
+                        />
+                      </motion.svg>
+                    </div>
+                    <motion.div
+                      className={styles.loaderText}
+                      animate={{ opacity: [0.5, 1, 0.5] }}
+                      transition={{ repeat: Infinity, duration: 1.5 }}
+                    >
+                      Loading Project...
+                    </motion.div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
 
             {/* Terminal View */}
             <div className={styles.terminalPane}>
               <div className={styles.terminalHeader}>Terminal</div>
               <div className={styles.terminalOutput}>
                 {terminalLogs.map((log, i) => (
-                  <motion.div 
-                    key={i} 
+                  <motion.div
+                    key={i}
                     className={`${styles.terminalLine} ${styles[log.type]}`}
                     initial={{ opacity: 0, x: -10 }}
                     animate={{ opacity: 1, x: 0 }}
@@ -181,7 +295,7 @@ export default function WorkSection() {
                   </motion.div>
                 ))}
                 {!isCompiled && (
-                  <motion.div 
+                  <motion.div
                     className={styles.terminalLine}
                     animate={{ opacity: [1, 0] }}
                     transition={{ repeat: Infinity, duration: 0.8 }}
@@ -195,7 +309,7 @@ export default function WorkSection() {
             {/* The Compiled UI Reveal */}
             <AnimatePresence>
               {isCompiled && (
-                <motion.div 
+                <motion.div
                   className={styles.compileOverlay}
                   initial={{ opacity: 0, scale: 0.9, y: 50 }}
                   animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -209,17 +323,17 @@ export default function WorkSection() {
                     </svg>
                   </button>
 
-                  <motion.div 
+                  <motion.div
                     className={styles.compiledCard}
                     whileHover={{ scale: 1.02, rotateY: 2, rotateX: 2 }}
                     transition={{ type: "spring", damping: 20 }}
                     style={{ transformPerspective: 1000 }}
                   >
                     <div className={styles.compiledImageContainer}>
-                      <Image 
-                        src={activeProject.link !== "#" 
-                          ? `https://api.microlink.io?url=${encodeURIComponent(activeProject.link)}&screenshot=true&meta=false&embed=screenshot.url` 
-                          : activeProject.image} 
+                      <Image
+                        src={activeProject.link !== "#"
+                          ? `https://api.microlink.io?url=${encodeURIComponent(activeProject.link)}&screenshot=true&meta=false&embed=screenshot.url`
+                          : activeProject.image}
                         alt={activeProject.title}
                         fill
                         unoptimized={true}
@@ -227,10 +341,11 @@ export default function WorkSection() {
                       />
                       <div className={styles.imageOverlay}></div>
                     </div>
-                    
+
                     <div className={styles.compiledBody}>
                       <div className={styles.cardHeader}>
                         <div>
+                          <span className={styles.industryBadge}>{activeProject.industry}</span>
                           <h3 className={styles.compiledTitle}>{activeProject.title}</h3>
                           <span className={styles.compiledClient}>Client: {activeProject.client}</span>
                         </div>
@@ -242,6 +357,19 @@ export default function WorkSection() {
                       </div>
 
                       <p className={styles.compiledDesc}>{activeProject.description}</p>
+
+                      {activeProject.impact && (
+                        <div className={styles.impactList}>
+                          {activeProject.impact.map((item, i) => (
+                            <span key={i} className={styles.impactItem}>
+                              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#4caf50" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                              </svg>
+                              {item}
+                            </span>
+                          ))}
+                        </div>
+                      )}
 
                       <a href={activeProject.link} target="_blank" rel="noopener noreferrer" className={styles.visitButton}>
                         Launch Application

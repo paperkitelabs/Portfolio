@@ -1,54 +1,35 @@
 .creativeSection {
   background-color: #ffffff;
-  background-image: 
-    radial-gradient(circle at 15% 20%, rgba(138, 43, 226, 0.15) 0%, transparent 50%),
-    radial-gradient(circle at 85% 80%, rgba(65, 105, 225, 0.15) 0%, transparent 50%);
   color: #111111;
-  padding: 10rem 0 8rem 0;
   overflow: hidden;
   position: relative;
 }
 
-.header {
-  text-align: center;
-  margin-bottom: 4rem;
-  padding: 0 2rem;
-}
-
-.sectionSubtitle {
-  font-family: var(--font-body);
-  color: #6a1b9a;
-  text-transform: uppercase;
-  letter-spacing: 0.15em;
-  font-size: 0.9rem;
-  font-weight: 600;
-  display: block;
-  margin-bottom: 0.5rem;
-}
-
-.sectionTitle {
-  font-family: var(--font-display);
-  font-size: clamp(2.5rem, 5vw, 4rem);
-  color: #111111;
-  margin: 0;
-  font-weight: 700;
-}
-
 /* =========================================
-   PART 1: THE 3D CYLINDER FILM STRIP
+   PART 1: FILM STRIP HERO (Blurred + Heading)
    ========================================= */
 
-.filmStripWrapper {
+.filmStripHero {
+  position: relative;
   width: 100%;
-  height: 500px;
-  perspective: 2000px; /* Deep perspective for the 3D cylinder */
-  margin-bottom: 6rem;
+  height: 600px;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.filmStripWrapper {
+  position: absolute;
+  inset: 0;
+  perspective: 2000px;
   display: flex;
   justify-content: center;
   align-items: center;
   overflow: hidden;
-  position: relative;
-  /* Soft purple glow behind the cylinder */
+  /* The 5px blur as requested */
+  filter: blur(5px);
+  transform: scale(1.05); /* Slightly larger to prevent blur edges showing white */
   background: radial-gradient(circle at center, rgba(138, 43, 226, 0.08) 0%, transparent 60%);
 }
 
@@ -60,16 +41,14 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  /* Tilt the camera down slightly to see the curve of the cylinder */
   transform: rotateX(-8deg) translateY(20px);
 }
 
 .marqueeContainer {
-  width: 500px; /* Width of one frame */
-  height: 300px; /* Height of one frame */
+  width: 500px;
+  height: 300px;
   position: absolute;
   transform-style: preserve-3d;
-  /* Framer motion handles the rotateY animation */
 }
 
 .filmFrame {
@@ -84,11 +63,9 @@
   padding-bottom: 30px;
   border-radius: 6px;
   box-shadow: 0 0 30px rgba(0,0,0,0.5);
-  /* Hidden backfaces are critical for the concave IMAX effect! */
   backface-visibility: hidden;
 }
 
-/* Sprocket Holes (White circles to simulate holes over the white ambient background) */
 .filmFrame::before, .filmFrame::after {
   content: '';
   position: absolute;
@@ -117,109 +94,260 @@
   height: 100%;
   object-fit: cover;
   filter: grayscale(20%) contrast(1.1);
-  transition: filter 0.4s ease;
 }
 
-.filmFrame:hover .frameImage {
-  filter: grayscale(0%) contrast(1);
+/* Heading Overlay — sits on top of blurred strip */
+.heroOverlay {
+  position: relative;
+  z-index: 5;
+  text-align: center;
+  padding: 2rem;
+  /* Apply difference blending to the entire overlay container to fix browser stacking bugs */
+  mix-blend-mode: difference;
+  color: #ffffff;
 }
 
+.sectionSubtitle {
+  font-family: var(--font-body);
+  color: inherit;
+  text-transform: uppercase;
+  letter-spacing: 0.3em;
+  font-size: 0.95rem;
+  font-weight: 700;
+  display: block;
+  margin-bottom: 1rem;
+}
+
+.sectionTitle {
+  font-family: var(--font-display);
+  font-size: clamp(3.5rem, 8vw, 7rem);
+  color: inherit;
+  margin: 0 0 1.5rem 0;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.sectionDesc {
+  font-family: var(--font-body);
+  font-size: clamp(1.1rem, 4vw, 1.4rem);
+  color: inherit;
+  max-width: 600px;
+  margin: 0 auto;
+  font-weight: 700; /* Much thicker to ensure visibility during color inversion */
+  line-height: 1.6;
+}
 
 
 /* =========================================
-   PART 2: THE PINTEREST MASONRY GRID
+   PART 2: PINTEREST VIDEO GRID
    ========================================= */
 
 .masonryContainer {
-  max-width: 1600px;
+  max-width: 1400px;
   margin: 0 auto;
-  padding: 0 2rem;
+  padding: 5rem 2rem 8rem 2rem;
 }
 
 .masonryGrid {
   column-count: 3;
-  column-gap: 2rem;
+  column-gap: 1.5rem;
 }
 
+/* ---- Individual Card ---- */
 .masonryItem {
   break-inside: avoid;
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
   position: relative;
-  border-radius: 12px;
+  border-radius: 16px;
   overflow: hidden;
-  background: #222;
+  background: #111;
   cursor: pointer;
-  transition: opacity 0.4s ease, filter 0.4s ease, transform 0.4s ease;
+  transition: filter 0.4s ease, transform 0.4s ease;
   transform-origin: center center;
 }
 
+/* Blur non-hovered items when any card is hovered */
+.masonryGridHovered .masonryItem {
+  filter: blur(3px) saturate(0.6);
+}
+
+/* The hovered card: clear blur, slight lift */
+.masonryGridHovered .masonryItem.masonryItemActive {
+  filter: blur(0px) saturate(1);
+  transform: scale(1.02);
+  z-index: 5;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+}
+
+/* ---- Thumbnail Image ---- */
 .masonryImage {
   width: 100%;
-  height: auto; 
+  height: auto;
+  max-height: 600px;
+  object-fit: cover;
+  object-position: center;
   display: block;
-  transition: transform 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+  transition: opacity 0.4s ease;
 }
 
-.masonryOverlay {
+/* ---- Video Layer ---- */
+.masonryVideo {
   position: absolute;
   inset: 0;
-  background: linear-gradient(to top, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.2) 60%, rgba(0,0,0,0) 100%);
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
   opacity: 0;
-  transition: opacity 0.4s ease;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  padding: 2rem;
+  transition: opacity 0.5s ease;
+  z-index: 2;
 }
 
-.masonryItem:hover .masonryOverlay {
+.masonryVideoVisible {
   opacity: 1;
 }
 
-.masonryItem:hover .masonryImage {
-  transform: scale(1.05);
+/* Fade out thumbnail when video is playing */
+.masonryItemActive .masonryImage {
+  opacity: 0;
 }
 
-/* Pinterest style dimming effect */
-.masonryGrid:hover .masonryItem:not(:hover) {
-  opacity: 0.3;
-  filter: grayscale(80%) blur(2px);
+/* ---- Sound Toggle Button ---- */
+.muteButton {
+  position: absolute;
+  bottom: 1rem;
+  right: 1rem;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(6px);
+  border: 1px solid rgba(255,255,255,0.2);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 6;
+  cursor: pointer;
+  color: #ffffff;
+  transition: background 0.2s;
+}
+.muteButton:hover {
+  background: rgba(0, 0, 0, 0.8);
+}
+.muteButton svg {
+  width: 18px;
+  height: 18px;
 }
 
-.itemTitle {
-  font-family: var(--font-display);
-  font-size: 1.8rem;
-  font-weight: 700;
-  color: #fff;
-  margin: 0 0 0.5rem 0;
-  transform: translateY(20px);
-  transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+/* ---- Info Overlay ---- */
+.masonryOverlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.25) 50%, rgba(0,0,0,0) 100%);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 1.8rem;
+  z-index: 3;
+  pointer-events: none;
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s ease;
+  transform: translateY(0);
+}
+
+/* Slide down and fade out the overlay when video is playing */
+.masonryItemActive .masonryOverlay {
+  transform: translateY(100%);
+  opacity: 0;
+}
+
+/* ---- Loader ---- */
+.loaderContainer {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 5;
+  background: rgba(0, 0, 0, 0.3);
+  pointer-events: none;
+}
+
+.dotsLoader {
+  width: 40px;
+  height: 12px;
+  background: radial-gradient(circle closest-side, #fff 90%, transparent) 0% 50%,
+              radial-gradient(circle closest-side, #fff 90%, transparent) 50% 50%,
+              radial-gradient(circle closest-side, #fff 90%, transparent) 100% 50%;
+  background-size: calc(100%/3) 100%;
+  background-repeat: no-repeat;
+  animation: dots 1s infinite linear;
+}
+@keyframes dots {
+  33% { background-size: calc(100%/3) 0%, calc(100%/3) 100%, calc(100%/3) 100%; }
+  50% { background-size: calc(100%/3) 100%, calc(100%/3) 0%, calc(100%/3) 100%; }
+  66% { background-size: calc(100%/3) 100%, calc(100%/3) 100%, calc(100%/3) 0%; }
 }
 
 .itemCategory {
   font-family: var(--font-body);
-  font-size: 0.85rem;
+  font-size: 0.72rem;
   text-transform: uppercase;
-  color: #ccc;
+  color: rgba(255, 255, 255, 0.6);
   letter-spacing: 0.15em;
-  transform: translateY(20px);
-  transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
-  transition-delay: 0.05s;
+  font-weight: 700;
+  margin-bottom: 0.4rem;
 }
 
-.masonryItem:hover .itemTitle,
-.masonryItem:hover .itemCategory {
-  transform: translateY(0);
+.itemTitle {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0 0 0.4rem 0;
+  line-height: 1.2;
 }
+
+.itemDescription {
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.65);
+  line-height: 1.5;
+  margin: 0;
+  max-width: 90%;
+}
+
+/* ---- Play Indicator ---- */
+.playIndicator {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(6px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 4;
+}
+
+
+/* =========================================
+   RESPONSIVE
+   ========================================= */
 
 @media (max-width: 1200px) {
   .masonryGrid { column-count: 2; }
 }
 
 @media (max-width: 768px) {
-  .masonryGrid { column-count: 1; }
-  .filmStripWrapper { perspective: 1000px; height: 350px; }
+  .filmStripHero { min-height: 550px; }
+  .filmStripWrapper { perspective: 1000px; }
   .filmFrame { width: 300px; height: 180px; }
   .marqueeContainer { width: 300px; height: 180px; }
-  /* Fallback or adjust radius for mobile will happen in JS */
+  .masonryGrid { column-count: 1; }
+  .masonryContainer { padding: 3rem 1.5rem 5rem 1.5rem; }
 }

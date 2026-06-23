@@ -1,15 +1,17 @@
 "use client";
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState, useCallback } from 'react';
 import { motion, useSpring, useMotionValue } from 'framer-motion';
 import styles from './KiteCursor.module.css';
 
 export default function KiteCursor() {
   const [isVisible, setIsVisible] = useState(false);
-  
+  const isVisibleRef = useRef(false);
+  const isTouchDevice = useRef(false);
+
   // Motion values for instant mouse tracking
-  const mouseX = useMotionValue(0);
-  const mouseY = useMotionValue(0);
+  const mouseX = useMotionValue(-100);
+  const mouseY = useMotionValue(-100);
 
   // Smooth springs for the Kite (follows closely)
   const kiteSpringConfig = { damping: 20, stiffness: 300, mass: 0.5 };
@@ -26,41 +28,70 @@ export default function KiteCursor() {
   const tail3X = useSpring(mouseX, { damping: 10, stiffness: 100, mass: 1.2 });
   const tail3Y = useSpring(mouseY, { damping: 10, stiffness: 100, mass: 1.2 });
 
+  const showCursor = useCallback(() => {
+    if (!isVisibleRef.current) {
+      isVisibleRef.current = true;
+      setIsVisible(true);
+    }
+  }, []);
+
+  const hideCursor = useCallback(() => {
+    if (isVisibleRef.current) {
+      isVisibleRef.current = false;
+      setIsVisible(false);
+    }
+  }, []);
+
   useEffect(() => {
+    // Don't show custom cursor on touch devices
+    const checkTouch = () => {
+      isTouchDevice.current = true;
+    };
+    window.addEventListener('touchstart', checkTouch, { once: true });
+
     const handleMouseMove = (e) => {
+      if (isTouchDevice.current) return;
       mouseX.set(e.clientX);
       mouseY.set(e.clientY);
-      if (!isVisible) setIsVisible(true);
+      showCursor();
     };
 
-    const handleMouseLeave = () => setIsVisible(false);
-    const handleMouseEnter = () => setIsVisible(true);
+    const handleMouseLeave = () => hideCursor();
+    const handleMouseEnter = () => {
+      if (!isTouchDevice.current) showCursor();
+    };
 
-    window.addEventListener('mousemove', handleMouseMove);
-    document.body.addEventListener('mouseleave', handleMouseLeave);
-    document.body.addEventListener('mouseenter', handleMouseEnter);
+    window.addEventListener('mousemove', handleMouseMove, { passive: true });
+    document.documentElement.addEventListener('mouseleave', handleMouseLeave);
+    document.documentElement.addEventListener('mouseenter', handleMouseEnter);
 
-    // Hide native cursor
-    document.body.style.cursor = 'none';
-
-    // Also hide cursor on all interactive elements
+    // Hide native cursor via a persistent stylesheet
     const style = document.createElement('style');
-    style.innerHTML = `* { cursor: none !important; }`;
+    style.id = 'kite-cursor-hide';
+    style.textContent = `
+      *, *::before, *::after {
+        cursor: none !important;
+      }
+    `;
     document.head.appendChild(style);
 
     return () => {
       window.removeEventListener('mousemove', handleMouseMove);
-      document.body.removeEventListener('mouseleave', handleMouseLeave);
-      document.body.removeEventListener('mouseenter', handleMouseEnter);
-      document.body.style.cursor = 'auto';
-      document.head.removeChild(style);
+      document.documentElement.removeEventListener('mouseleave', handleMouseLeave);
+      document.documentElement.removeEventListener('mouseenter', handleMouseEnter);
+      window.removeEventListener('touchstart', checkTouch);
+      
+      // Restore native cursor
+      const existingStyle = document.getElementById('kite-cursor-hide');
+      if (existingStyle) existingStyle.remove();
     };
-  }, [mouseX, mouseY, isVisible]);
+  }, [mouseX, mouseY, showCursor, hideCursor]);
 
+  // Don't render on touch devices or when not visible
   if (!isVisible) return null;
 
   return (
-    <div className={styles.cursorContainer}>
+    <div className={styles.cursorContainer} aria-hidden="true">
       {/* Colorful Tail Dots */}
       <motion.div 
         className={`${styles.tailDot} ${styles.color1}`}
@@ -75,17 +106,16 @@ export default function KiteCursor() {
         style={{ x: tail1X, y: tail1Y }}
       />
 
-      {/* Main Kite */}
+      {/* Main Kite — tip of the top-left corner aligns with mouse position */}
       <motion.div 
         className={styles.kite}
         style={{ 
           x: kiteX, 
           y: kiteY,
-          rotate: 45 // Kites are usually tilted diamonds
         }}
       >
-        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          {/* Top half of kite */}
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          {/* Kite diamond shape */}
           <path d="M12 2L22 12L12 22L2 12L12 2Z" fill="url(#kiteGradient)" stroke="#ffffff" strokeWidth="1.5" strokeLinejoin="round"/>
           {/* Cross frame */}
           <line x1="12" y1="2" x2="12" y2="22" stroke="#ffffff" strokeWidth="1" strokeOpacity="0.5"/>

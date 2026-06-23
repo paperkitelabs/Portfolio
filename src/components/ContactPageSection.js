@@ -1,12 +1,38 @@
 "use client";
 
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import emailjs from '@emailjs/browser';
 import styles from './ContactPageSection.module.css';
 import Image from 'next/image';
 
 export default function ContactPageSection() {
   const [method, setMethod] = useState('email'); // 'email' or 'call'
+  const formRef = useRef();
+  const [status, setStatus] = useState('idle'); // 'idle', 'sending', 'success', 'error'
+
+  const sendEmail = (e) => {
+    e.preventDefault();
+    setStatus('sending');
+
+    // You can also trigger the auto-reply template automatically through the EmailJS dashboard's "Auto-Reply" tab on your main template, 
+    // or by calling a second emailjs.send() here if needed.
+    emailjs.sendForm(
+      process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID,
+      process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID,
+      formRef.current,
+      process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY
+    )
+    .then((result) => {
+        setStatus('success');
+        formRef.current.reset();
+        setTimeout(() => setStatus('idle'), 4000);
+    }, (error) => {
+        console.error(error.text);
+        setStatus('error');
+        setTimeout(() => setStatus('idle'), 4000);
+    });
+  };
 
   return (
     <section className={styles.contactSection}>
@@ -58,29 +84,29 @@ export default function ContactPageSection() {
               {method === 'email' ? (
                 <motion.form 
                   key="email"
+                  ref={formRef}
                   className={styles.formArea}
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
                   exit={{ opacity: 0, x: 20 }}
                   transition={{ duration: 0.2 }}
-                  onSubmit={(e) => {
-                    e.preventDefault();
-                    alert("Form submitted! (Hook up to your backend)");
-                  }}
+                  onSubmit={sendEmail}
                 >
                   <div className={styles.inputGroup}>
                     <label className={styles.label}>Name</label>
-                    <input type="text" className={styles.input} placeholder="John Doe" required />
+                    <input type="text" name="from_name" className={styles.input} placeholder="John Doe" required />
                   </div>
                   <div className={styles.inputGroup}>
                     <label className={styles.label}>Email</label>
-                    <input type="email" className={styles.input} placeholder="john@company.com" required />
+                    <input type="email" name="from_email" className={styles.input} placeholder="john@company.com" required />
                   </div>
                   <div className={styles.inputGroup}>
                     <label className={styles.label}>Project Details</label>
-                    <textarea className={styles.textarea} placeholder="Tell us about your goals..." required></textarea>
+                    <textarea name="message" className={styles.textarea} placeholder="Tell us about your goals..." required></textarea>
                   </div>
-                  <button type="submit" className={styles.submitBtn}>Send Message</button>
+                  <button type="submit" className={styles.submitBtn} disabled={status === 'sending'}>
+                    {status === 'sending' ? 'Sending...' : status === 'success' ? 'Message Sent!' : status === 'error' ? 'Error. Try again.' : 'Send Message'}
+                  </button>
                 </motion.form>
               ) : (
                 <motion.div 
@@ -99,8 +125,7 @@ export default function ContactPageSection() {
                   </svg>
                   <h3 className={styles.bookingTitle}>Discovery Call</h3>
                   <p className={styles.bookingDesc}>Book a free 30-minute consultation with our team to discuss your project.</p>
-                  {/* Replace this href with your actual Cal.com / Calendly link */}
-                  <a href="#" className={styles.bookingBtn} onClick={(e) => { e.preventDefault(); alert("Replace this with your booking link!"); }}>
+                  <a href="https://cal.com/paper-kite-labs" target="_blank" rel="noopener noreferrer" className={styles.bookingBtn}>
                     Schedule Meeting
                   </a>
                 </motion.div>
