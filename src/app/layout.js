@@ -1,4 +1,5 @@
 import { Inter, Lilita_One } from "next/font/google";
+import Script from "next/script";
 import "./globals.css";
 import KiteCursor from "@/components/KiteCursor";
 import { OrganizationJsonLd, LocalBusinessJsonLd } from "@/components/JsonLd";
@@ -143,6 +144,19 @@ export default function RootLayout({ children }) {
         <link rel="dns-prefetch" href="https://images.unsplash.com" />
       </head>
       <body>
+        {/* Google Analytics */}
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-1FRNMJ0CS8"
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-1FRNMJ0CS8');
+          `}
+        </Script>
         <KiteCursor />
         {children}
       </body>
