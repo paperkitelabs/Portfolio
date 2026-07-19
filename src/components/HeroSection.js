@@ -33,35 +33,16 @@ export default function HeroSection() {
       <div className={styles.heroBg} />
 
       {/* Main Hero Content */}
-      <div className={styles.heroContent}>
+      <header className={styles.heroContent}>
         <h1 className={styles.headline}>
           {["We", "Build", "Intelligent", "Systems", "for", "Modern", "Businesses"].map((word, index) => (
             <span key={index}>
-              {word === "Intelligent" ? (
-                <span style={{ whiteSpace: 'nowrap' }}>
-                  <span className={styles.inlineImageWrapper}>
-                    <img 
-                      src="https://images.unsplash.com/photo-1620712943543-bcc4688e7485?q=80&w=400&auto=format&fit=crop" 
-                      alt="Intelligent" 
-                      className={styles.inlineImage} 
-                    />
-                  </span>
-                  {' '}
-                  <span 
-                    className={styles.word} 
-                    style={{ animationDelay: `${0.2 + index * 0.15}s` }}
-                  >
-                    {word}
-                  </span>
-                </span>
-              ) : (
-                <span 
-                  className={styles.word} 
-                  style={{ animationDelay: `${0.2 + index * 0.15}s` }}
-                >
-                  {word}
-                </span>
-              )}
+              <span 
+                className={styles.word} 
+                style={{ animationDelay: `${0.2 + index * 0.15}s` }}
+              >
+                {word}
+              </span>
               {' '}
               {(word === "Intelligent" || word === "Modern") && <br />}
             </span>
@@ -74,7 +55,7 @@ export default function HeroSection() {
           <a href="#work" className={styles.primaryButton}>See Our Work</a>
           <a href="#contact" className={styles.secondaryButton}>Talk to Us</a>
         </div>
-      </div>
+      </header>
 
       {/* 3D Paper Kite Model — centered, above bg text */}
       <div className={styles.modelContainer}>

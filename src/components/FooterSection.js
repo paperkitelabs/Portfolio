@@ -79,10 +79,10 @@ export default function FooterSection() {
         <div className={styles.thinRow}>
           <div className={styles.logoGroup}>
             <Image
-              src="/logo.png"
+              src="https://res.cloudinary.com/dgooptuqc/image/upload/v1784444008/logo_xgseu4.png"
               alt="Paper Kite Labs Logo"
-              width={28}
-              height={28}
+              width={48}
+              height={48}
               className={styles.logoImage}
             />
             <span className={styles.copyright}>© {new Date().getFullYear()} Paperkite Labs.</span>

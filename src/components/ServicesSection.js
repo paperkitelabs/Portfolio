@@ -87,7 +87,7 @@ export default function ServicesSection() {
   };
 
   return (
-    <section className={styles.servicesSection} id="services">
+    <section className={styles.servicesSection} id="services" aria-label="Our Services — AI Solutions, Custom Software, Data Intelligence, AI Videos">
       <div className={styles.container}>
         <motion.div 
           className={styles.header}

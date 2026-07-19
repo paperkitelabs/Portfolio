@@ -27,6 +27,11 @@
   gap: 1rem;
 }
 
+.logoImage {
+  border-radius: 50%;
+  object-fit: contain;
+}
+
 .copyright {
   font-family: var(--font-body);
   font-size: 0.95rem;

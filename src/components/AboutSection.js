@@ -29,7 +29,7 @@ export default function AboutSection() {
   const answerY = useTransform(scrollYProgress, [0.6, 0.7], [40, 0]);
 
   return (
-    <section className={styles.aboutSection} ref={containerRef} id="about">
+    <section className={styles.aboutSection} ref={containerRef} id="about" aria-label="About Paper Kite Labs — Who We Are">
       <div className={styles.stickyContainer}>
         <motion.div 
           className={styles.imageWrapper}

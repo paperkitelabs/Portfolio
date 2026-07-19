@@ -23,16 +23,13 @@ export default function Navbar() {
         {/* Logo */}
         <a href="/" className={styles.logoContainer}>
           <Image
-            src="/logo.png"
+            src="https://res.cloudinary.com/dgooptuqc/image/upload/v1784444008/logo_xgseu4.png"
             alt="Paper Kite Labs Logo"
-            width={36}
-            height={36}
+            width={56}
+            height={56}
             className={styles.logoImage}
             priority
           />
-          <span className={styles.logoText}>
-            Paperkite <span className={styles.logoTextAccent}>Labs</span>
-          </span>
         </a>
 
         {/* Desktop Navigation Links */}
