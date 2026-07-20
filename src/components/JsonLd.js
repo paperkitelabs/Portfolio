@@ -233,7 +233,7 @@ export function VideoObjectJsonLd({ videos }) {
     "description": video.description,
     "thumbnailUrl": video.thumbnail,
     "contentUrl": video.videoUrl,
-    "uploadDate": "2025-01-01",
+    "uploadDate": "2025-01-01T00:00:00+05:30",
     "publisher": {
       "@id": "https://paperkitelabs.com/#organization"
     }
